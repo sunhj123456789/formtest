@@ -1,0 +1,12 @@
+<div class="container">
+   <div class="row">
+     <form class="form-group" #f="ngForm" (ngSubmit)="submit(person)">
+     <label>deposit</label>
+     <input type="text" name="deposit" placeholder="Enter ur deposit amount" [(ngModel)]="person.deposit" name="deposit" #deposit="ngModel" ><br>
+     <label>reason</label>
+     <input type="text" name="reason" placeholder="Enter ur reason" [(ngModel)]="person.reason" name="deposit" #reason="ngModel"  ><br>
+     <input type="submit" value="deposit">
+   </form>
+   </div>
+</div>
+<app-display></app-display>
