@@ -1,0 +1,423 @@
+/*****************html**************************/
+
+<div class="container">
+    <div class="img-container"  *ngFor="let i of sliderArray; let select = index;"
+         [ngClass]="{'selected': select == selectedIndex}">
+      <img src="{{i.img}}" alt="{{i.alt}}" >
+    </div>
+  
+    <!--</div>-->
+    <div [ngStyle]="{'transform': 'translateY('+ transform + '%' +')', 'transition': '.8s'}">
+      <div class="text-container">
+        <div class="page-text" *ngFor="let i of sliderArray;let select = index;" [ngClass]="{'selected': select == selectedIndex}">
+          <h3>{{i.text}}</h3>
+        </div>
+      </div>
+    </div>
+    
+    <a class="next"  href="#" (click)="next()" (keypress)="next()">
+      <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </a>
+    <a class="prev" href="#" (click)="prev()" (keypress)="prev()">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    </a>
+  
+  </div>  
+
+  <div style="text-align:center">
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+  </div>
+  
+
+     <!---- <button class="slide-button-parent-container" type="button" *ngFor="let i of sliderArray; let x =index" (click)="selected(x)" (keypress)="keySelected(x)">next</button>-->
+  
+
+  <!----<div class="slider">
+    <div class="slide-button-parent-container"  *ngFor="let i of sliderArray; let x =index" (click)="selected(x)" (keypress)="keySelected(x)" >
+       <div class="select-box">
+        <div   class="slide-button" [ngClass]="{'slide-button-select': x == selectedIndex}" >
+        </div>
+       </div>
+    </div>
+  </div>-->
+  /*******************************************carousel ts****************************************************/
+  import { Component, OnInit,Input } from '@angular/core';
+
+@Component({
+  selector: 'app-carousel',
+  templateUrl: './carousel.component.html',
+  styleUrls: ['./carousel.component.css']
+})
+export class CarouselComponent implements OnInit {
+
+  @Input()sliderArray:any;
+  selectedIndex:number=0;
+  length:number;
+  transform: number;
+  constructor() { 
+    //this.selectedIndex = 0;
+    this.transform = 100;
+    //this.length=this.sliderArray.length;
+    
+  }
+
+  ngOnInit() {  
+  //console.log(this.sliderArray.length);
+  this.length=this.sliderArray.length-1;
+  console.log(this.length);
+  console.log(this.sliderArray);
+  }
+  next() {
+    console.log(this.selectedIndex);
+    //this.downSelected(x);
+      
+      if(this.selectedIndex >=this.length)
+      this.selectedIndex=0;
+      else
+      this.selectedIndex = this.selectedIndex+1;
+
+    }
+    
+    //console.log(x);
+   
+
+   prev(){
+     console.log(this.selectedIndex);
+    this.selectedIndex = this.selectedIndex-1;
+    
+    if(this.selectedIndex<0){
+      this.selectedIndex=this.length;
+    }
+
+   }
+
+   keySelected(x) {
+     this.downSelected(x);
+     this.selectedIndex = x;
+   }
+   downSelected(i) {
+    this.transform =  100 - (i) * 50;
+      this.selectedIndex = this.selectedIndex + 1;
+      if(this.selectedIndex > 4) {
+        this.selectedIndex = 0;
+      }
+   }
+
+
+}
+*****************************css*****************************
+
+img {
+    max-width: 100%;
+  }
+     .container {
+        height:100%;
+        overflow: hidden;
+        font-size: 16px;
+      }
+  
+  .img-container {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    height: auto !important;
+    background-size: cover;
+    background-position: center;
+    will-change: opacity;
+    transition: opacity .3s;
+    cursor: pointer;
+  }
+  
+  
+  
+  .slide-button:hover, .slide-button-select {
+    width: 64px !important;
+    background-color: rgba(255,255,255,1) !important;
+    pointer-events: none;
+    transition: background-color .4s, width 4s cubic-bezier(0.190, 1.000, 0.220, 1.000) !important;
+  }
+  
+  
+  .slide-button {
+    width: 30px;
+    height: 4px;
+    background-color: rgba(255,255,255,.5);
+    cursor: pointer;
+    position: absolute;
+  
+  }
+  
+  .slider {
+    position: absolute;
+    top: 50%;
+    right: 80px;
+    opacity: 1;
+    min-width: 30px;
+  
+  }
+  
+  .slide-button-parent-container {
+    position: relative;
+    margin: 22px 0;
+    min-height: 4px;
+  }
+  
+  .select-box {
+    min-height: 10px;
+  }
+  
+  .text-container {
+  
+    height: 100vh;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .page-text {
+    min-height: 373px;
+    width: 50%;
+    height: 100%;
+    opacity: 0;
+    font-weight: 300;
+    font-size: 90px;
+    color: white;
+  }
+  
+  .selected {
+    opacity: 1;
+    transition: 1s;
+  }
+  
+  /****/
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    text-decoration: none;
+  }
+  
+  
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+  
+  .dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+  
+  .active {
+    background-color: #717171;
+  }
+  
+
+
+
+
+
+
+
+
+/*****************************************app ts*********************************/
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  sliderArr = [
+    {img: 'assets/images/1.jpg', alt: 'img1', text: '365 Days Of weddings a year'},
+    {img: 'assets/images/2.jpg', alt: 'img2',  text: '365 Days Of weddings a year'},
+    {img: 'assets/images/3.jpg', alt: 'img3', text: '365 Days Of weddings a year'},
+    {img: 'assets/images/4.jpg', alt: 'img4',  text: '365 Days Of weddings a year'},
+    ];
+}
+********************************app html**********************/
+<app-carousel [sliderArray]="sliderArr"></app-carousel>
+ **************************css***********/
+ 
+img {
+  max-width: 100%;
+}
+
+	.container {
+	  height:100%;
+	  overflow: hidden;
+	}
+
+.img-container {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  height: auto !important;
+  background-size: cover;
+  background-position: center;
+  will-change: opacity;
+  transition: opacity .3s;
+  cursor: pointer;
+}
+
+
+
+.slide-button:hover, .slide-button-select {
+  width: 64px !important;
+  background-color: rgba(255,255,255,1) !important;
+  pointer-events: none;
+  transition: background-color .4s, width 4s cubic-bezier(0.190, 1.000, 0.220, 1.000) !important;
+}
+
+
+.slide-button {
+  width: 30px;
+  height: 4px;
+  background-color: rgba(255,255,255,.5);
+  cursor: pointer;
+  position: absolute;
+
+}
+
+.slider {
+  position: absolute;
+  top: 50%;
+  right: 80px;
+  opacity: 1;
+  min-width: 30px;
+
+}
+
+.slide-button-parent-container {
+  position: relative;
+  margin: 22px 0;
+  min-height: 4px;
+}
+
+.select-box {
+  min-height: 10px;
+}
+
+.text-container {
+
+  height: 100vh;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page-text {
+  min-height: 373px;
+  width: 50%;
+  height: 100%;
+  opacity: 0;
+  font-weight: 300;
+  font-size: 90px;
+  color: white;
+}
+
+.selected {
+  opacity: 1;
+  transition: 1s;
+}
+**********************ts**********************
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+
+@Component({
+  selector: 'app-slider',
+  templateUrl: './slider.component.html',
+  styleUrls: ['./slider.component.css'],
+  encapsulation: ViewEncapsulation.Native
+})
+export class SliderComponent implements OnInit {
+  selectedIndex: number;
+  transform: number;
+  constructor() {
+    this.selectedIndex = 0;
+    this.transform = 100;
+  }
+
+  sliderArray = [
+    {img: 'http://bloquo.cc/img/works/1.jpg', alt: '', text: '365 Days Of weddings a year'},
+    {img: 'http://bloquo.cc/img/works/2.jpg', alt: '',  text: '365 Days Of weddings a year'},
+    {img: 'http://bloquo.cc/img/works/3.jpg', alt: '', text: '365 Days Of weddings a year'},
+    {img: 'http://bloquo.cc/img/works/4.jpg', alt: '',  text: '365 Days Of weddings a year'},
+    {img: 'http://bloquo.cc/img/works/5.jpg', alt: '', text: '365 Days Of weddings a year'}
+  ];
+
+  ngOnInit() {}
+
+  selected(x) {
+    this.downSelected(x);
+    this.selectedIndex = x;
+	console.log(x);
+
+   }
+
+   keySelected(x) {
+     this.downSelected(x);
+     this.selectedIndex = x;
+   }
+   downSelected(i) {
+    this.transform =  100 - (i) * 50;
+      this.selectedIndex = this.selectedIndex + 1;
+      if(this.selectedIndex > 4) {
+        this.selectedIndex = 0;
+      }
+   }
+
+}
+
+***************************html***************************
+<div class="container">
+  <div class="img-container"  *ngFor="let i of sliderArray; let select = index;"
+       [ngClass]="{'selected': select == selectedIndex}">
+    <img src="{{i.img}}" alt="{{i.alt}}" >
+  </div>
+
+  <!--</div>-->
+  <div [ngStyle]="{'transform': 'translateY('+ transform + '%' +')', 'transition': '.8s'}">
+    <div class="text-container">
+      <div class="page-text" *ngFor="let i of sliderArray;let select = index;" [ngClass]="{'selected': select == selectedIndex}">
+        <h3>{{i.text}}</h3>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="slider">
+  <div class="slide-button-parent-container"  *ngFor="let i of sliderArray; let x =index" (click)="selected(x)" (keypress)="keySelected(x)" >
+     <div class="select-box">
+      <div   class="slide-button" [ngClass]="{'slide-button-select': x == selectedIndex}" >
+      </div>
+     </div>
+  </div>
+</div>
+
+
+
