@@ -1,0 +1,345 @@
+import { Component, OnInit,Input } from '@angular/core';
+
+@Component({
+  selector: 'app-carousel',
+  templateUrl: './carousel.component.html',
+  styleUrls: ['./carousel.component.css']
+})
+export class CarouselComponent implements OnInit {
+
+  @Input()sliderArray:any;
+  timer:any;  
+  selectedIndex:number=0;
+  length:number;
+  transform: number;
+  constructor() {    
+  }
+
+  ngOnInit() {
+    this.length=this.sliderArray.length-1;
+    console.log(this.length);
+    console.log(this.sliderArray);
+   // this.transform=100;
+    this.load();
+  }
+
+  load(){
+    this.timer = setInterval(() => {
+
+      if (this.selectedIndex <this.sliderArray.length) 
+      { 
+     
+        //this.transform=this.translateContent(this.selectedIndex);
+         this.selectedIndex++;
+         
+        
+         //console.log(this.transform);
+         
+              if(this.selectedIndex>this.sliderArray.length-1)
+              {
+              this.selectedIndex=0;
+               }
+              //console.log(this.selectedIndex);
+          } 
+      else 
+      { 
+         clearInterval(this.timer); 
+      }
+   }, 4000)
+
+  }
+  next() {
+    console.log(this.selectedIndex);
+    //this.downSelected(x);
+        
+      if(this.selectedIndex >=this.length)
+      this.selectedIndex=0;
+      else
+      this.selectedIndex = this.selectedIndex+1;      
+      //this.transform=this.translateContent(this.selectedIndex);
+    }
+
+    prev(){
+      console.log(this.selectedIndex);
+     this.selectedIndex = this.selectedIndex-1;     
+     if(this.selectedIndex<0){
+       this.selectedIndex=this.length;
+     }
+    }
+translateContent(x){
+  console.log(x);
+   return 100-(x) * 50;
+}
+  
+  
+  
+   /* keySelected(x) {
+      this.downSelected(x);
+      this.selectedIndex = x;
+    }
+    downSelected() {
+     this.transform =  100 - (i) * 50;
+       //this.selectedIndex = this.selectedIndex + 1;
+       //if(this.selectedIndex > 4) {
+         this.selectedIndex = 0;
+       }
+    }*/
+
+
+}
+/************************html**************************/
+<div class="container">
+      <!---image display here-->
+      <div class="img-container"  *ngFor="let i of sliderArray; let select = index;"
+          [ngClass]="{'selected': select == selectedIndex}">
+
+        <div class="landscape">
+          <img src="{{i.img}}" alt="{{i.alt}}" >
+        </div>
+      </div>
+
+  <!--image information-->
+
+      <!--<div [ngStyle]="{'transform': 'translateY('+ transform + '%' +')', 'transition': '.8s'}">-->
+          <div [ngStyle]="{'transform': 'translateY('+ transform + '%' +')', 'transit ion': '.8s'}">
+        <div class="text-container">
+          <div class="page-text" *ngFor="let i of sliderArray;let select = index;" [ngClass]="{'selected': select == selectedIndex}">
+            <h5>{{i.text}}</h5>
+          </div>
+        </div>
+      </div>
+
+  <!--next and prev buttons------>
+        <a class="next"  href="#" (click)="next()" (keypress)="next()">
+               <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
+        </a>
+        <a class="prev" href="#" (click)="prev()" (keypress)="prev()">
+                <i class="fa fa-chevron-left fa-2x" aria-hidden="true"></i>
+        </a>
+
+  <!---dots in slides------>
+
+  <!--<span style="text-align:center">
+      <ol  *ngFor="let i of sliderArray; let select = index;"
+      [ngClass]="{'selected': select == selectedIndex}" >
+      <li></li>
+    </ol>
+
+</span>-->
+
+<!--<div class="dots-container">
+<ul *ngFor="let i of sliderArray; let select = index;">
+    <li class="dot"></li>     
+</ul>
+</div>-->
+<!--
+<div class="slider">
+    <div class="slide-button-parent-container"  *ngFor="let i of sliderArray; let x =index" (click)="selected(x)" (keypress)="keySelected(x)" >
+       <div class="select-box">
+        <div  class="slide-button" [ngClass]="{'slide-button-select': x == selectedIndex}" >
+        </div>
+       </div>
+    </div>
+  </div>
+-->
+
+<div class="slider1">
+  <div class="slide-button-parent-container" *ngFor="let i of sliderArray; let x =index" (click)="selected(x)" (keypress)="keySelected(x)" >
+    <div [ngClass]="{'slide-button-select': x == selectedIndex}">
+    <span class="dot"></span> 
+    </div>
+  </div>
+
+     
+</div>
+ 
+
+/**************************************css**********************//
+
+img {
+    max-width: 100%;
+  }
+.container 
+{
+        height:100%;
+        overflow: hidden;        
+        
+}
+  .img-container {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    height: auto !important;
+    background-size: cover;
+    background-position: center;
+    will-change: opacity;
+    transition: opacity .3s;
+    cursor: pointer;
+  }
+  
+ 
+  .dot:hover, .slide-button-select {
+    border-radius:50%;
+    background-color: rgba(255,255,255,1) !important;
+    pointer-events: none;
+    width:25px;
+    height:25px;
+    /*transition: background-color .4s, width 4s cubic-bezier(0.190, 1.000, 0.220, 1.000) !important;*/
+  }
+  
+  
+  .slide-button {
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background-color: rgba(255,255,255,.5);
+    cursor: pointer; 
+    display:inline-block;  
+    margin-left:20px;  
+  }
+  
+  .slider {
+    position: absolute;
+    bottom:0;
+    left:50%;    
+    opacity: 1;
+    min-width: 30px;
+    border:1px solid red;      
+  }
+
+  .slider1 {
+    position: absolute;
+    bottom:0;      
+    min-width:30px;
+    left:40%; 
+    opacity:1; 
+  }
+
+  
+  .slide-button-parent-container {
+   /*position: relative;*/
+    margin: 22px 0;
+    display:inline-block;    
+    padding:0 20px;     
+  }
+  
+  
+  
+  .text-container {  
+    height: 100vh;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+  }
+  
+  .page-text {
+    min-height: 373px;
+    width: 50%;
+    height: 100%;
+    opacity: 0;
+    font-weight: 300;
+    font-size: 60px;
+    color: white;
+    /*border:1px solid green;*/
+  }
+  
+  
+  .selected {
+    opacity: 1;
+    transition: 1s;
+  }
+  
+  /****/
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    text-decoration: none;
+  }
+    
+  .next {
+    right: 0; 
+    border-radius: 3px 0 0 3px;
+  }
+    
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+  
+  .dot {
+    height:25px;
+    width: 25px;      
+    border-radius: 50%;
+    display:block;
+    /*transition: background-color 0.6s ease;*/
+    cursor: pointer;
+    background-color: rgba(255,255,255,.5);
+      }
+  
+  /*.active {
+    background-color: #717171;
+  }*/
+  
+
+
+ 
+ 
+
+   
+  @media(max-width:786px){
+
+    .slider1{
+      bottom:50px;
+    }
+    .page-text {
+      height:600px;
+    }
+    .fa-2x {
+      font-size: 1.5em;
+    }
+
+    .prev, .next {
+      padding:10px;
+    }
+
+    .text-container{
+      display:none;
+    }
+  }
+
+  @media(max-width:320px){
+ 
+    .slide-button-parent-container {
+      border:1px solid green;
+      padding:0;
+     
+      bottom:30px;
+    }
+    .fa-2x {
+      font-size: 1em;
+    }
+    .prev, .next {
+      padding:8px;
+    }
+    .text-container{
+      display:none;
+    }
+  
+  }
+
+
+
+
+
+
