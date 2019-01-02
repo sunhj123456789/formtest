@@ -1,0 +1,16 @@
+<app-test>
+    <ng-template #green>
+         <h1>this is template content of green</h1>
+    </ng-template>
+</app-test>
+
+///child
+  @ContentChild('green') ref:TemplateRef<any>;
+  constructor() { }
+  ngOnInit() {  
+  }
+  
+}
+//child html file
+<ng-container [ngTemplateOutlet]="ref"></ng-container>
+
