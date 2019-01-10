@@ -38,3 +38,21 @@ remove(){
 </ng-template>
 {{p}}
 
+***********************view container ****************************
+@ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
+  component = null;
+
+  constructor(private resolver: ComponentFactoryResolver) {
+  }
+
+  show(type) {
+    this.component = type === 'a' ? AComponent : BComponent;
+    const factory = this.resolver.resolveComponentFactory(this.component);
+    this.vc.clear();
+    this.vc.createComponent(factory);
+  }
+}
+*************************
+
+
+
