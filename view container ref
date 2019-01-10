@@ -1,0 +1,40 @@
+import { Component,ViewChild,ViewChildren,QueryList } from '@angular/core';
+import { ViewContainerRef,ElementRef,TemplateRef,AfterViewInit,AfterViewChecked } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: [ './app.component.css' ]
+})
+export class AppComponent  {
+  p:any;
+@ViewChild('vc',{read:ViewContainerRef})vc:ViewContainerRef;
+@ViewChildren('c',{read:ElementRef})childcmp:QueryList<ElementRef>;
+@ViewChild(TemplateRef)template:TemplateRef<null>;
+
+
+ ngAfterViewInit()
+  {
+   this.vc.createEmbeddedView(this.template);   
+  }
+  
+ngAfterViewChecked(){
+  console.log("the number of childs:" +this.childcmp.length);
+ //this.p=this.childcmp.length;
+    
+}
+remove(){
+  this.vc.clear();
+}
+
+
+}
+///**************************view **************************//
+<h1>view container</h1>
+<button type="button" (click)=remove()>remove</button>
+<ng-container #vc></ng-container>
+<ng-template>
+  <app-parent #c></app-parent>
+</ng-template>
+{{p}}
+
