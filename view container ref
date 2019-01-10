@@ -1,3 +1,6 @@
+https://blog.angularindepth.com/working-with-dom-in-angular-unexpected-consequences-and-optimization-techniques-682ac09f6866
+
+
 import { Component,ViewChild,ViewChildren,QueryList } from '@angular/core';
 import { ViewContainerRef,ElementRef,TemplateRef,AfterViewInit,AfterViewChecked } from '@angular/core';
 
