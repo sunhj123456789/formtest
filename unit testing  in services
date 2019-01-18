@@ -1,0 +1,106 @@
+import { element, by } from 'protractor';
+import { Observable } from 'rxjs/internal/Observable';
+import { UserService } from './../service/user.service';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserComponent } from './user.component';
+import {of} from 'rxjs';
+import{By} from  '@angular/platform-browser';
+
+
+
+describe('UserComponent', () => {
+  let component: UserComponent;
+  let fixture: ComponentFixture<UserComponent>;
+  let dataservice;
+  let mockItems;
+  let el: HTMLElement;
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ UserComponent ],
+      providers:[UserService]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserComponent);
+    component = fixture.componentInstance;       
+    dataservice=fixture.debugElement.injector.get(UserService);
+    mockItems=[
+      {name:'sundar',gender:'male',department:'Accounting'},
+      {name:'Ram',gender:'male',department:'Science'},
+      {name:'jai',gender:'male',department:'HR'}
+    ];  
+      });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it("should fetch the data asynchronously", async(() => {
+  spyOn(dataservice,'get').and.returnValue(of(mockItems));    
+  fixture.whenStable().then(()=>{
+  fixture.detectChanges();      
+  component.getUsers();  
+  expect(component.data).toEqual(mockItems);
+    })
+  }));
+  
+
+  it("should check the the no of items display on the page correctly ", async(() => {
+    spyOn(dataservice,'get').and.returnValue(of(mockItems));    
+    fixture.whenStable().then(()=>{
+    fixture.detectChanges();   
+    component.getUsers();   
+    let result=component.data.length; 
+    expect(result).toEqual(3);
+      })
+    }));
+    
+  it('should check the panel header of the data',async(()=>{
+    fixture.detectChanges();
+    const compiled=fixture.debugElement;
+    //let element=compiled.query(By.css('h4')).nativeElement.innerText;
+    //let element=compiled.query(By.css('.data')).nativeElement.innerText;
+    fixture.whenStable().then(()=>{
+    let element=compiled.queryAll(By.css('div>.data'));
+    //let element=fixture.debugElement.queryAll(By.css('h4'));
+    //let data=element[1].nativeElement.query()
+    let ph1=element[0].nativeElement.querySelector('h4').innerText;
+    let ph2=element[1].nativeElement.querySelector('h4').innerText;
+    let ph3=element[2].nativeElement.querySelector('h4').innerText;
+    console.log(ph1,ph2,ph3);
+    expect(ph1).toContain('sundar');
+    expect(ph2).toContain('Ram');
+    expect(ph3).toContain('jai');
+  //console.log(element[0].nativeElement.querySelector('h4').innerText);
+    //console.log(element[0].nativeElement.queryAll(By.css('.list-group-item')));
+    //console.log(element[0].nativeElement.queryAll('.list-group-item').innerText);
+    
+
+  
+  
+
+
+    });
+     
+    //expect(element).toContain("sundar"); 
+    //expect(element).toContain("male"); 
+    //expect(element).toContain("Accounting");  
+  }));
+  
+
+
+
+  
+
+
+});
+    
+
+  
+  
+
+
+
+
