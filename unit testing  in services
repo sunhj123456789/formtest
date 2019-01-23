@@ -76,30 +76,98 @@ describe('UserComponent', () => {
   //console.log(element[0].nativeElement.querySelector('h4').innerText);
     //console.log(element[0].nativeElement.queryAll(By.css('.list-group-item')));
     //console.log(element[0].nativeElement.queryAll('.list-group-item').innerText);
-    
-
-  
-  
-
-
-    });
+        });
      
     //expect(element).toContain("sundar"); 
     //expect(element).toContain("male"); 
     //expect(element).toContain("Accounting");  
   }));
+  });
+    
+*****************************http**********************************************
+
   
+  import { Data } from './../model/test.model';
+import { TestBed,inject, async } from '@angular/core/testing';
+import { DataService } from './data.service';
+import {HttpClientTestingModule,HttpTestingController} from '@angular/common/http/testing';
+//import { HttpEvent, HttpEventType, HttpClientModule } from '@angular/common/http';
+import{HttpClientModule} from '@angular/common/http'
 
+//import { inject } from '@angular/core/testing/src/test_bed';
 
+describe('DataService', () => {
+  let service:DataService;
+  let httpMock:HttpTestingController;
+  let mockItems:any;
+  beforeEach(() => TestBed.configureTestingModule({
+      imports:[HttpClientModule],
+      providers:[DataService],          
+     
+  }));
+     //service= TestBed.get(DataService);
+     //httpMock=TestBed.get(HttpTestingController);
 
+    /* afterEach(() => {
+      httpMock.verify();
+    });*/
   
+     it('should be created',async(inject([DataService],(service:DataService) => {      
+       expect(service).toBeTruthy();
+     })));
+     
+     it('should check the data is working properly',async(inject([DataService],(service:DataService)=>{
+      mockItems={
+        "userId": 1,
+        "id": 1,
+        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+      };        
+      service.getPosts().subscribe(data=>{
+        //console.log(data.id);
+        console.log(data[0].title);
+        //expect(data).toEqual(mockItems);
+        expect(data[0].id).toEqual(mockItems.id);
+        expect(data[0].title).toEqual(mockItems.title);
+        expect(data[0].body).toEqual(mockItems.body);
+        //expect(data.length).toEqual(1);
+       });
 
+
+     })));
+
+
+
+     /*it('it should retrive the data from API Get',async(()=>{
+      service= TestBed.get(DataService);      
+       const dummyPosts=[ 
+        {
+          "userId": 1,
+          "id": 1,
+          "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+          "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+        }
+      ];
+       service.getPosts().subscribe(data=>{
+        expect(data).toEqual(dummyPosts);
+       });
+       const req=httpMock.expectOne(service.Root_URL);
+       expect(req.request.method).toEqual('GET');
+       req.flush(dummyPosts);
+       httpMock.verify();
+     }));*/
+  
 
 });
-    
 
-  
-  
+
+
+
+ 
+ 
+
+
+
 
 
 
