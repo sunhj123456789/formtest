@@ -98,10 +98,10 @@ import{HttpClientModule} from '@angular/common/http'
 
 describe('DataService', () => {
   let service:DataService;
-  let httpMock:HttpTestingController;
+  let backend:HttpTestingController;
   let mockItems:any;
   beforeEach(() => TestBed.configureTestingModule({
-      imports:[HttpClientModule],
+      imports:[HttpClientModule,HttpClientTestingModule],
       providers:[DataService],          
      
   }));
@@ -116,6 +116,7 @@ describe('DataService', () => {
        expect(service).toBeTruthy();
      })));
      
+
      it('should check the data is working properly',async(inject([DataService],(service:DataService)=>{
       mockItems={
         "userId": 1,
@@ -125,16 +126,35 @@ describe('DataService', () => {
       };        
       service.getPosts().subscribe(data=>{
         //console.log(data.id);
-        console.log(data[0].title);
+        console.log(data);
+        
         //expect(data).toEqual(mockItems);
         expect(data[0].id).toEqual(mockItems.id);
         expect(data[0].title).toEqual(mockItems.title);
         expect(data[0].body).toEqual(mockItems.body);
+      
         //expect(data.length).toEqual(1);
        });
-
-
      })));
+
+
+     it('should check the url data',async(inject([DataService,HttpTestingController],
+      (service:DataService,backend:HttpTestingController)=>{
+        /*service.getPosts().subscribe(data=>{
+          expect(data).toBeGreaterThan(80);
+         });*/
+         service.getPosts().subscribe(data=>{
+          let req = backend.expectOne(service.Root_URL);
+          expect(req.request.method).toEqual('GET');
+          req.flush({});
+         });
+        backend.verify(); 
+        
+
+      })));
+
+
+
 
 
 
@@ -159,6 +179,12 @@ describe('DataService', () => {
   
 
 });
+
+
+
+
+ 
+ 
 
 
 
