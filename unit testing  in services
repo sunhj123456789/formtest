@@ -1,3 +1,33 @@
+<div class="container">
+        <div class="row" *ngIf="data1">
+                <div *ngFor="let data of data1 " class="data">
+                     <div class=" col-xs-12 col-md-4" >             
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                 <h4 class="text-center head">{{data.id}}</h4>
+                            </div>
+                            <div class="panel-body">
+                                    <ul class="list-group">
+                                            <li class="list-group-item">{{data.title}}</li>
+                                            <li class="list-group-item">{{data.body}}</li>                                       
+                                    </ul>
+                            </div>
+                    </div>  
+                </div>
+             </div>
+          </div>   
+
+*******component.ts****************/
+
+
+this.DataService.getPosts().subscribe((data)=>{
+ // console.log(data);
+this.data1=data;
+console.log(this.data1);
+});
+
+
+/***********************spec file*************************/
 import { element, by } from 'protractor';
 import { Observable } from 'rxjs/internal/Observable';
 import { UserService } from './../service/user.service';
@@ -84,7 +114,7 @@ describe('UserComponent', () => {
   }));
   });
     
-*****************************http**********************************************
+*****************************HTTP service **********************************************
 
   
   import { Data } from './../model/test.model';
