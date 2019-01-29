@@ -1,3 +1,75 @@
 https://stackblitz.com/edit/hashtaagblog2-1?file=app%2Fapp.component.html
 https://medium.com/hashtaagco/3-levels-of-nested-form-arrays-including-reactive-validations-we-decided-to-go-inception-mode-on-4fffe667fb2a
 https://blog.grossman.io/real-world-angular-reactive-forms/
+
+
+
+Reactive Forms
+******************html**************
+<div class="outline">
+
+<form [formGroup]="regForm" (ngSubmit)="submit()">
+  Name:<input type="text" formControlName="name"><br>
+  Department:<input type="text" formControlName="department"><br>
+  
+ <h2 class="outline ">Address</h2>
+ <div formArrayName="items"
+  *ngFor="let item of regForm.get('items').controls; let i = index;"
+  >
+    <div [formGroupName]="i" >
+      Name<input type="text" formControlName="name"><br>
+     Description <input type="text" formControlName="Description"><br>
+      price<input type="text" formControlName="price"><br>
+      <button type="button" (click)="remove(i)">remove</button>
+    </div>
+ </div>
+  <button type="button" (click)="addItem()">Add</button>
+  <div class="outline">
+    <button type="submit" >Submit</button>
+</div>
+</form>
+
+</div>
+****************componen************
+name = 'Angular';
+  regForm:FormGroup;
+  items:FormArray;
+ constructor(private fb:FormBuilder){}
+ 
+ ngOnInit(){
+   this.createForm();
+  //console.log(this.regForm.get('items'));
+ }
+
+createForm(){
+this.regForm=this.fb.group({
+name:[],
+department:[],
+items:this.fb.array([this.createItem()])
+});
+}
+createItem():FormGroup{
+ return this.fb.group({
+   name:[],
+   Description:[],
+   price:[]
+ });
+
+}
+
+
+addItem(): void {
+  this.items = this.regForm.get('items') as FormArray;
+   this.items.push(this.createItem());
+}
+
+remove(i){
+this.items.removeAt(i);
+
+}
+
+submit(){
+  console.log(this.regForm.value);
+  this.regForm.reset();
+  
+}
