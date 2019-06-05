@@ -1,3 +1,5 @@
+_.pick(a,'type','email.emailAddress','inactive','preferred');
+
 import { Directive,ElementRef,Renderer,HostListener,Input,HostBinding } from '@angular/core';
 
 @Directive({
